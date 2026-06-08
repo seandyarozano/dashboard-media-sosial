@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Insights — Dashboard Media Sosial</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #CC0000;
+  --red-dark: #A80000;
+  --red-light: #fff0f0;
+  --black: #111111;
+  --white: #ffffff;
+  --gray-50: #f8f8f7;
+  --gray-100: #f0efee;
+  --gray-200: #e0dedb;
+  --gray-400: #9a9894;
+  --gray-600: #5f5e5a;
+  --green: #2e7d32;
+  --green-light: #e8f5e9;
+  --blue: #185fa5;
+  --blue-light: #e3f0ff;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var(--black); min-height: 100vh; font-size: 14px; }
+
+/* LOADING */
+#loading-screen {
+  position: fixed; inset: 0; background: var(--red);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999; transition: opacity .4s;
+}
+#loading-screen h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; color: #fff; letter-spacing: .05em; }
+#loading-screen p { color: rgba(255,255,255,0.65); font-size: 13px; margin-top: 8px; }
+.spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; margin-bottom: 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* LOGIN SCREEN */
+#login-screen {
+  display: none; position: fixed; inset: 0;
+  background: var(--gray-50); z-index: 9998;
+  align-items: center; justify-content: center;
+}
+#login-screen.show { display: flex; }
+.login-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+.login-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  color: var(--red);
+  letter-spacing: .03em;
+  margin-bottom: 4px;
+}
+.login-sub {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-bottom: 28px;
+}
+.login-desc {
+  font-size: 13px;
+  color: var(--gray-600);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-google:hover { border-color: var(--gray-400); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+.login-note { font-size: 11px; color: var(--gray-400); margin-top: 16px; line-height: 1.5; }
+
+/* READ-ONLY BANNER */
+#readonly-banner {
+  display: none;
+  background: #fff8e1;
+  border-bottom: 1px solid #ffe082;
+  padding: 8px 24px;
+  font-size: 12px;
+  color: #6d4c00;
+  text-align: center;
+}
+#readonly-banner.show { display: block; }
+
+/* HEADER */
+.site-header { background: var(--red); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.site-header h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; color: #fff; letter-spacing: .02em; }
+.site-header h1 span { opacity: .55; font-weight: 700; font-size: 11px; display: block; letter-spacing: .1em; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.sync-status { font-size: 11px; color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 5px; }
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf50; flex-shrink: 0; }
+.sync-dot.syncing { background: #ffeb3b; animation: pulse .8s ease-in-out infinite; }
+.sync-dot.error { background: #ff5252; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* USER CHIP */
+.user-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 99px;
+  padding: 4px 12px 4px 4px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.user-chip:hover { background: rgba(255,255,255,0.25); }
+.user-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: #fff;
+  overflow: hidden;
+}
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.user-name { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 500; }
+
+/* SIGN IN BTN (header, when not logged in) */
+.btn-signin-header {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.5);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Barlow', sans-serif;
+  transition: all .15s;
+}
+.btn-signin-header:hover { background: rgba(255,255,255,0.15); }
+
+.header-date { font-size: 11px; color: rgba(255,255,255,0.6); text-align: right; }
+
+/* USER DROPDOWN */
+.user-dropdown {
+  display: none;
+  position: fixed;
+  top: 58px; right: 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 8px;
+  min-width: 220px;
+  z-index: 200;
+}
+.user-dropdown.open { display: block; }
+.ud-info { padding: 8px 10px 12px; border-bottom: 1px solid var(--gray-100); margin-bottom: 6px; }
+.ud-name { font-size: 13px; font-weight: 600; color: var(--black); }
+.ud-email { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+.ud-btn {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 8px 10px;
+  border: none; background: transparent;
+  color: var(--gray-600); font-family: 'Barlow', sans-serif; font-size: 12px;
+  cursor: pointer; border-radius: var(--radius);
+  transition: background .15s; text-align: left;
+}
+.ud-btn:hover { background: var(--gray-100); color: var(--black); }
+.ud-btn.danger { color: #c62828; }
+.ud-btn.danger:hover { background: #fff0f0; }
+
+/* NAV */
+.main-nav { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 0 24px; display: flex; gap: 0; overflow-x: auto; }
+.main-nav button { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 500; padding: 13px 18px; border: none; background: transparent; color: var(--gray-600); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; }
+.main-nav button:hover { color: var(--black); }
+.main-nav button.active { color: var(--red); border-bottom-color: var(--red); }
+
+/* CONTENT */
+.content { padding: 20px 24px; max-width: 1100px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; }
+.section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: .03em; color: var(--black); margin-bottom: 4px; }
+.section-sub { font-size: 12px; color: var(--gray-400); margin-bottom: 16px; }
+.card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 16px 20px; }
+
+/* DISABLED STATE */
+.is-readonly .kb-move-btn,
+.is-readonly .kb-add-btn,
+.is-readonly .kpi-save-btn,
+.is-readonly .li-check,
+.is-readonly .w-card,
+.is-readonly .con-cell,
+.is-readonly .growth-status-btn {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* KANBAN */
+.kanban-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.week-tabs { display: flex; gap: 5px; flex-wrap: wrap; }
+.week-tab { font-size: 12px; padding: 4px 11px; border-radius: 99px; border: 1px solid var(--gray-200); background: var(--white); color: var(--gray-600); cursor: pointer; font-family: 'Barlow', sans-serif; transition: all .15s; }
+.week-tab:hover { border-color: var(--red); color: var(--red); }
+.week-tab.active { background: var(--black); color: #fff; border-color: var(--black); }
+.plat-filters { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.plat-btn { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--gray-200); background: var(--white); color: var(--gray-600); cursor: pointer; font-family: 'Barlow', sans-serif; transition: all .15s; }
+.plat-btn:hover { border-color: var(--red); }
+.plat-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+.kb-stats { display: flex; gap: 8px; margin-bottom: 12px; }
+.kb-stat { flex: 1; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 10px 12px; text-align: center; }
+.kb-stat-n { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; color: var(--black); }
+.kb-stat-n.red { color: var(--red); }
+.kb-stat-n.green { color: var(--green); }
+.kb-stat-l { font-size: 10px; color: var(--gray-400); margin-top: 2px; }
+.kb-progress { height: 4px; background: var(--gray-200); border-radius: 99px; margin-bottom: 14px; overflow: hidden; }
+.kb-progress-fill { height: 100%; background: var(--red); border-radius: 99px; transition: width .4s; }
+.kb-board { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; align-items: start; }
+@media(max-width:650px){ .kb-board { grid-template-columns: 1fr; } }
+.kb-col { background: var(--gray-100); border-radius: var(--radius-lg); padding: 10px; min-height: 180px; }
+.kb-col-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.kb-col-title { font-size: 13px; font-weight: 600; color: var(--black); display: flex; align-items: center; gap: 6px; }
+.col-dot { width: 8px; height: 8px; border-radius: 50%; }
+.col-dot.todo { background: var(--gray-400); }
+.col-dot.prog { background: var(--red); }
+.col-dot.done { background: var(--green); }
+.kb-count { font-size: 11px; background: var(--white); border: 1px solid var(--gray-200); border-radius: 99px; padding: 1px 7px; color: var(--gray-600); }
+.kb-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 6px; transition: border-color .15s, box-shadow .15s; }
+.kb-card:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(204,0,0,0.07); }
+.kb-card.done { opacity: .5; }
+.kb-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
+.kb-card-title { font-size: 12px; font-weight: 500; color: var(--black); line-height: 1.4; flex: 1; }
+.plat-badge { font-size: 10px; padding: 2px 7px; border-radius: 99px; white-space: nowrap; flex-shrink: 0; font-weight: 500; }
+.badge-LinkedIn { background: #dbeafe; color: #1e40af; }
+.badge-Instagram { background: #fce7f3; color: #9d174d; }
+.badge-Threads { background: #ede9fe; color: #5b21b6; }
+.badge-GitHub { background: #dcfce7; color: #15803d; }
+.badge-Blog { background: #fff7ed; color: #c2410c; }
+.badge-Story { background: #e0f2fe; color: #075985; }
+.kb-card-meta { font-size: 10px; color: var(--gray-400); margin-bottom: 5px; }
+.kb-move-btn { font-size: 10px; padding: 2px 8px; border: 1px solid var(--gray-200); border-radius: 99px; background: transparent; color: var(--gray-600); cursor: pointer; font-family: 'Barlow', sans-serif; transition: all .15s; }
+.kb-move-btn:hover { border-color: var(--red); color: var(--red); }
+.kb-add-btn { width: 100%; font-size: 12px; padding: 7px; border: 1px dashed var(--gray-200); border-radius: var(--radius); background: transparent; color: var(--gray-400); cursor: pointer; font-family: 'Barlow', sans-serif; text-align: left; transition: all .15s; margin-top: 2px; }
+.kb-add-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; align-items: center; justify-content: center; padding: 16px; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: var(--white); border-radius: var(--radius-lg); padding: 24px; width: 100%; max-width: 400px; box-shadow: 0 16px 48px rgba(0,0,0,0.15); }
+.modal-box h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.modal-box label { font-size: 12px; color: var(--gray-600); display: block; margin: 10px 0 4px; }
+.modal-box input, .modal-box select { width: 100%; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--radius); font-family: 'Barlow', sans-serif; font-size: 13px; background: var(--white); color: var(--black); outline: none; }
+.modal-box input:focus, .modal-box select:focus { border-color: var(--red); }
+.modal-btns { display: flex; gap: 8px; margin-top: 18px; }
+.btn-primary { flex: 1; padding: 9px; background: var(--red); color: #fff; border: none; border-radius: var(--radius); font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; }
+.btn-primary:hover { background: var(--red-dark); }
+.btn-secondary { flex: 1; padding: 9px; background: transparent; color: var(--gray-600); border: 1px solid var(--gray-200); border-radius: var(--radius); font-family: 'Barlow', sans-serif; font-size: 13px; cursor: pointer; }
+
+/* ROADMAP */
+.cycle-section { margin-bottom: 18px; }
+.cycle-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-600); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.cycle-pill { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-family: 'Barlow', sans-serif; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.pill-s1 { background: #ffe4e4; color: var(--red-dark); }
+.pill-s2 { background: var(--blue-light); color: var(--blue); }
+.pill-s3 { background: var(--green-light); color: var(--green); }
+.week-cards { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
+@media(max-width:600px){ .week-cards { grid-template-columns: repeat(3,1fr); } }
+.w-card { border-radius: var(--radius); border: 1px solid var(--gray-200); padding: 10px 8px; cursor: pointer; transition: all .15s; position: relative; background: var(--white); }
+.w-card:hover { border-color: var(--red); }
+.w-card.done { background: var(--green-light); border-color: #a8d5b5; }
+.w-card.prog { background: var(--red-light); border-color: var(--red); }
+.w-card.todo { background: var(--gray-100); border-color: var(--gray-200); }
+.w-num { font-size: 10px; color: var(--gray-400); margin-bottom: 3px; }
+.w-theme { font-size: 11px; font-weight: 600; color: var(--black); line-height: 1.3; }
+.w-status { font-size: 10px; margin-top: 5px; }
+.w-status.done { color: var(--green); }
+.w-status.prog { color: var(--red); }
+.w-status.todo { color: var(--gray-400); }
+.w-badge { position: absolute; top: 5px; right: 5px; font-size: 9px; padding: 1px 5px; border-radius: 99px; }
+.roadmap-summary { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.rs-label { font-size: 12px; color: var(--gray-600); flex-shrink: 0; }
+.rs-bar { flex: 1; height: 6px; background: var(--gray-200); border-radius: 99px; overflow: hidden; min-width: 80px; }
+.rs-fill { height: 100%; background: var(--red); border-radius: 99px; transition: width .4s; }
+.rs-pct { font-size: 13px; font-weight: 600; color: var(--black); flex-shrink: 0; }
+.roadmap-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.rl { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray-600); }
+.rl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* KPI */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(155px,1fr)); gap: 10px; margin-bottom: 18px; }
+.kpi-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 14px 16px; }
+.kpi-plat { font-size: 10px; color: var(--gray-400); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 3px; }
+.kpi-name { font-size: 12px; color: var(--gray-600); margin-bottom: 5px; }
+.kpi-val { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; color: var(--black); line-height: 1; }
+.kpi-target { font-size: 10px; color: var(--gray-400); margin-top: 3px; margin-bottom: 6px; }
+.kpi-bar-wrap { height: 4px; background: var(--gray-200); border-radius: 99px; margin-bottom: 8px; overflow: hidden; }
+.kpi-bar-fill { height: 100%; border-radius: 99px; transition: width .4s; }
+.kpi-input-row { display: flex; gap: 5px; align-items: center; }
+.kpi-input-row input { width: 70px; padding: 4px 7px; font-size: 12px; border: 1px solid var(--gray-200); border-radius: var(--radius); font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var(--black); outline: none; }
+.kpi-input-row input:focus { border-color: var(--red); }
+.kpi-save-btn { font-size: 11px; padding: 4px 9px; border: 1px solid var(--gray-200); border-radius: var(--radius); background: transparent; cursor: pointer; font-family: 'Barlow', sans-serif; color: var(--gray-600); transition: all .15s; }
+.kpi-save-btn:hover { border-color: var(--red); color: var(--red); }
+.con-section { margin-top: 8px; }
+.con-section-title { font-size: 13px; font-weight: 600; color: var(--black); margin-bottom: 4px; }
+.con-hint { font-size: 11px; color: var(--gray-400); margin-bottom: 8px; }
+.con-week-labels { display: grid; grid-template-columns: repeat(15,1fr); gap: 3px; margin-bottom: 3px; }
+.con-lbl { font-size: 9px; color: var(--gray-400); text-align: center; }
+.con-grid { display: grid; grid-template-columns: repeat(15,1fr); gap: 3px; }
+.con-cell { height: 22px; border-radius: 3px; cursor: pointer; transition: opacity .15s, transform .1s; }
+.con-cell:hover { opacity: .75; transform: scale(1.1); }
+.con-cell.skip { background: var(--gray-200); }
+.con-cell.hit { background: var(--green); }
+.con-cell.miss { background: #e24b4a; }
+.con-legend { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+.con-leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray-600); }
+.con-leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+/* LINKEDIN */
+.li-scores { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 8px; margin-bottom: 18px; }
+.li-score-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 10px 12px; }
+.li-score-label { font-size: 11px; color: var(--gray-600); margin-bottom: 5px; }
+.li-score-row { display: flex; align-items: center; gap: 6px; }
+.li-score-num { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--black); min-width: 36px; }
+.li-score-bar { flex: 1; height: 4px; background: var(--gray-200); border-radius: 99px; overflow: hidden; }
+.li-score-fill { height: 100%; background: var(--red); border-radius: 99px; }
+.li-score-target { font-size: 10px; color: var(--gray-400); }
+.li-phase { margin-bottom: 16px; }
+.li-phase-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-200); }
+.li-phase-title { font-size: 13px; font-weight: 600; color: var(--black); }
+.li-phase-tag { font-size: 10px; padding: 2px 9px; border-radius: 99px; }
+.tag-active { background: var(--red-light); color: var(--red); }
+.tag-coming { background: var(--blue-light); color: var(--blue); }
+.tag-future { background: var(--gray-100); color: var(--gray-600); }
+.li-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+.li-item:last-child { border-bottom: none; }
+.li-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--gray-200); cursor: pointer; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.li-check:hover { border-color: var(--red); }
+.li-check.done { background: var(--green); border-color: var(--green); }
+.li-check.done::after { content: ''; width: 6px; height: 4px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translate(1px,0); }
+.li-text { font-size: 12px; color: var(--black); line-height: 1.5; flex: 1; }
+.li-text.crossed { color: var(--gray-400); text-decoration: line-through; }
+
+/* GROWTH */
+.growth-list { display: flex; flex-direction: column; }
+.growth-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--gray-100); }
+.growth-row:last-child { border-bottom: none; }
+.growth-num { font-size: 11px; font-weight: 600; color: var(--gray-400); width: 22px; flex-shrink: 0; }
+.growth-text { font-size: 12px; color: var(--black); line-height: 1.5; flex: 1; }
+.growth-phase { font-size: 10px; padding: 2px 8px; border-radius: 99px; flex-shrink: 0; }
+.gphase-now { background: var(--red-light); color: var(--red); }
+.gphase-f2 { background: var(--blue-light); color: var(--blue); }
+.gphase-f3 { background: var(--green-light); color: var(--green); }
+.growth-status-btn { font-size: 10px; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--gray-200); background: transparent; color: var(--gray-600); cursor: pointer; font-family: 'Barlow', sans-serif; flex-shrink: 0; transition: all .15s; }
+.growth-status-btn:hover { border-color: var(--red); color: var(--red); }
+.growth-status-btn.s-prog { background: var(--red); color: #fff; border-color: var(--red); }
+.growth-status-btn.s-done { background: var(--green); color: #fff; border-color: var(--green); }
+
+.site-footer { text-align: center; padding: 20px; font-size: 11px; color: var(--gray-400); margin-top: 20px; border-top: 1px solid var(--gray-200); }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <h1>IT INSIGHTS</h1>
+  <p id="loading-msg">Menghubungkan ke database...</p>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">IT INSIGHTS</div>
+    <div class="login-sub">Dashboard Media Sosial · @seandyarozano</div>
+    <p class="login-desc">Login dengan akun Google untuk mengakses dan mengedit dashboard konten IT Insights.</p>
+    <button class="btn-google" id="btn-google-login">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Masuk dengan Google
+    </button>
+    <p class="login-note">Dashboard ini hanya untuk @seandyarozano.<br>Akun lain bisa melihat tapi tidak bisa mengedit.</p>
+  </div>
+</div>
+
+<!-- READ-ONLY BANNER -->
+<div id="readonly-banner">
+  👁 Kamu sedang dalam mode <strong>view only</strong>. Login sebagai @seandyarozano untuk mengedit.
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1><span>IT INSIGHTS · @seandyarozano</span>Dashboard Media Sosial</h1>
+  <div class="header-right">
+    <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-label">Menghubungkan...</span></div>
+    <div id="header-user"></div>
+    <div class="header-date" id="hdr-date"></div>
+  </div>
+</header>
+
+<!-- USER DROPDOWN -->
+<div class="user-dropdown" id="user-dropdown">
+  <div class="ud-info">
+    <div class="ud-name" id="ud-name"></div>
+    <div class="ud-email" id="ud-email"></div>
+  </div>
+  <button class="ud-btn danger" id="btn-signout">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+    Keluar
+  </button>
+</div>
+
+<nav class="main-nav">
+  <button class="active" data-tab="kanban">📋 Kanban</button>
+  <button data-tab="roadmap">🗺 Roadmap 15W</button>
+  <button data-tab="kpi">📊 KPI Tracker</button>
+  <button data-tab="linkedin">💼 LinkedIn 90-Day</button>
+  <button data-tab="growth">🚀 Growth Program</button>
+</nav>
+
+<div class="content" id="main-content">
+
+<!-- KANBAN -->
+<div class="panel active" id="tab-kanban">
+  <div class="section-title">Kanban Content Board</div>
+  <p class="section-sub">Tracking produksi konten per minggu. Data tersimpan realtime ke Firebase.</p>
+  <div class="kanban-top"><div class="week-tabs" id="week-tabs"></div></div>
+  <div class="plat-filters" id="plat-filters"></div>
+  <div class="kb-stats" id="kb-stats"></div>
+  <div class="kb-progress"><div class="kb-progress-fill" id="kb-prog-bar"></div></div>
+  <div class="kb-board">
+    <div class="kb-col">
+      <div class="kb-col-hdr"><span class="kb-col-title"><span class="col-dot todo"></span>To Do</span><span class="kb-count" id="cnt-todo">0</span></div>
+      <div id="list-todo"></div>
+      <button class="kb-add-btn" data-col="todo">+ Tambah tugas</button>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-hdr"><span class="kb-col-title"><span class="col-dot prog"></span>On Progress</span><span class="kb-count" id="cnt-prog">0</span></div>
+      <div id="list-prog"></div>
+      <button class="kb-add-btn" data-col="prog">+ Tambah tugas</button>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-hdr"><span class="kb-col-title"><span class="col-dot done"></span>Done</span><span class="kb-count" id="cnt-done">0</span></div>
+      <div id="list-done"></div>
+      <button class="kb-add-btn" data-col="done">+ Tandai selesai</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div class="panel" id="tab-roadmap">
+  <div class="section-title">Roadmap 15 Minggu</div>
+  <p class="section-sub">Klik kartu untuk toggle status. 3 siklus: Fondasi → Pendalaman → Otoritas.</p>
+  <div class="cycle-section"><div class="cycle-label">Siklus 1 — Fondasi <span class="cycle-pill pill-s1">W1–W5</span></div><div class="week-cards" id="wc-s1"></div></div>
+  <div class="cycle-section"><div class="cycle-label">Siklus 2 — Pendalaman <span class="cycle-pill pill-s2">W6–W10</span></div><div class="week-cards" id="wc-s2"></div></div>
+  <div class="cycle-section"><div class="cycle-label">Siklus 3 — Otoritas <span class="cycle-pill pill-s3">W11–W15</span></div><div class="week-cards" id="wc-s3"></div></div>
+  <div class="roadmap-summary">
+    <span class="rs-label">Progress Siklus 1</span>
+    <div class="rs-bar"><div class="rs-fill" id="rs-fill"></div></div>
+    <span class="rs-pct" id="rs-pct">0/5</span>
+  </div>
+  <div class="roadmap-legend">
+    <div class="rl"><div class="rl-dot" style="background:var(--green);"></div>Selesai</div>
+    <div class="rl"><div class="rl-dot" style="background:var(--red);"></div>On Progress</div>
+    <div class="rl"><div class="rl-dot" style="background:var(--gray-200);"></div>Belum dimulai</div>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="panel" id="tab-kpi">
+  <div class="section-title">KPI Tracker</div>
+  <p class="section-sub">Update setiap Minggu malam. Isi angka aktual → klik Simpan → tersimpan otomatis.</p>
+  <div class="kpi-grid" id="kpi-grid"></div>
+  <div class="card con-section">
+    <div class="con-section-title">Konsistensi Posting (15 Minggu)</div>
+    <p class="con-hint">Klik sel untuk toggle: kosong → ✓ sesuai jadwal → ✗ terlewat</p>
+    <div class="con-week-labels" id="con-labels"></div>
+    <div class="con-grid" id="con-grid"></div>
+    <div class="con-legend">
+      <div class="con-leg-item"><div class="con-leg-dot" style="background:var(--green);"></div>Sesuai jadwal</div>
+      <div class="con-leg-item"><div class="con-leg-dot" style="background:#e24b4a;"></div>Terlewat</div>
+      <div class="con-leg-item"><div class="con-leg-dot" style="background:var(--gray-200);"></div>Belum waktunya</div>
+    </div>
+  </div>
+</div>
+
+<!-- LINKEDIN -->
+<div class="panel" id="tab-linkedin">
+  <div class="section-title">LinkedIn 90-Day Plan</div>
+  <p class="section-sub">Baseline audit: 3 Juni 2026. Klik lingkaran untuk tandai selesai.</p>
+  <div class="li-scores" id="li-scores"></div>
+  <div class="card">
+    <div class="li-phase">
+      <div class="li-phase-hdr"><span class="li-phase-title">Hari 1–30 — Foundation</span><span class="li-phase-tag tag-active">Fase aktif</span></div>
+      <div id="li-list-1"></div>
+    </div>
+    <div class="li-phase">
+      <div class="li-phase-hdr"><span class="li-phase-title">Hari 31–60 — Engagement Push</span><span class="li-phase-tag tag-coming">Akan datang</span></div>
+      <div id="li-list-2"></div>
+    </div>
+    <div class="li-phase" style="margin-bottom:0;">
+      <div class="li-phase-hdr"><span class="li-phase-title">Hari 61–90 — Authority Signal</span><span class="li-phase-tag tag-future">Fase 3</span></div>
+      <div id="li-list-3"></div>
+    </div>
+  </div>
+</div>
+
+<!-- GROWTH -->
+<div class="panel" id="tab-growth">
+  <div class="section-title">Growth Program</div>
+  <p class="section-sub">13 program dari Bagian 16 master doc. Klik status untuk toggle.</p>
+  <div class="card"><div class="growth-list" id="growth-list"></div></div>
+</div>
+
+</div>
+
+<footer class="site-footer">
+  IT Insights Dashboard Media Sosial · @seandyarozano · Powered by Firebase · 2026
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <h3>Tambah Tugas</h3>
+    <label>Judul konten</label>
+    <input type="text" id="f-title" placeholder="cth: Post LinkedIn Senin anchor" />
+    <label>Platform</label>
+    <select id="f-plat"><option>LinkedIn</option><option>Instagram</option><option>Threads</option><option>Blog</option><option>GitHub</option><option>Story</option></select>
+    <label>Hari</label>
+    <select id="f-day"><option>Senin</option><option>Selasa</option><option>Rabu</option><option>Kamis</option><option>Jumat</option><option>Sabtu</option></select>
+    <label>Minggu</label>
+    <select id="f-week">
+      <option value="W1">W1 — Networking</option>
+      <option value="W2">W2 — Website & SEO</option>
+      <option value="W3" selected>W3 — Cybersecurity</option>
+      <option value="W4">W4 — AI & Produktivitas</option>
+      <option value="W5">W5 — IT Career</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-secondary" id="modal-cancel">Batal</button>
+      <button class="btn-primary" id="modal-save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyACCTMe_-GcR7PJClhOMRsWz1ikNy3IFfE",
+  authDomain: "it-insights-dashboard.firebaseapp.com",
+  projectId: "it-insights-dashboard",
+  storageBucket: "it-insights-dashboard.firebasestorage.app",
+  messagingSenderId: "626801477549",
+  appId: "1:626801477549:web:0b9e6e221942da7cdc8324"
+};
+
+// Email yang diizinkan untuk edit — ganti dengan email Google kamu
+const OWNER_EMAIL = "seandyarozano@gmail.com";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+let currentUser = null;
+let isOwner = false;
+
+// ===== DEFAULT DATA =====
+const TASKS_SEED = [
+  // ── W1 · Networking & Infrastructure (SELESAI) ──────────────────────────
+  {id:'w1-1',week:'W1',title:'Post LinkedIn Senin Anchor — Pelajaran Networking Sehari-hari',plat:'LinkedIn',day:'Senin',status:'done'},
+  {id:'w1-2',week:'W1',title:'Infografis Networking (portrait & landscape)',plat:'Instagram',day:'Senin',status:'done'},
+  {id:'w1-3',week:'W1',title:'IG Story 2 frame — amplifikasi LinkedIn Senin',plat:'Story',day:'Senin',status:'done'},
+  {id:'w1-4',week:'W1',title:'Carousel 5 slide — Broadcast→Handshake→Packet Loss',plat:'Instagram',day:'Selasa',status:'done'},
+  {id:'w1-5',week:'W1',title:'Post LinkedIn Rabu — Cloudflare Down 5.5 Jam',plat:'LinkedIn',day:'Rabu',status:'done'},
+  {id:'w1-6',week:'W1',title:'Infografis Cloudflare',plat:'Instagram',day:'Rabu',status:'done'},
+  {id:'w1-7',week:'W1',title:'Post LinkedIn Jumat Opini — Networking insight',plat:'LinkedIn',day:'Jumat',status:'done'},
+  {id:'w1-8',week:'W1',title:'Infografis IG Jumat — Networking ringkasan',plat:'Instagram',day:'Jumat',status:'done'},
+  {id:'w1-9',week:'W1',title:'Threads Utas Jumat [1/5]–[5/5] — Networking',plat:'Threads',day:'Jumat',status:'done'},
+  {id:'w1-10',week:'W1',title:'GitHub push — routing-table-explained.md & dns-for-beginners.md',plat:'GitHub',day:'Jumat',status:'done'},
+  {id:'w1-11',week:'W1',title:'Artikel Blog TU — Cloudflare Outage',plat:'Blog',day:'Sabtu',status:'done'},
+
+  // ── W2 · Website & SEO (SELESAI) ─────────────────────────────────────────
+  {id:'w2-1',week:'W2',title:'Post LinkedIn Senin Anchor — Website Lambat Padahal Internet Kencang',plat:'LinkedIn',day:'Senin',status:'done'},
+  {id:'w2-2',week:'W2',title:'Infografis Website Lambat (portrait & landscape)',plat:'Instagram',day:'Senin',status:'done'},
+  {id:'w2-3',week:'W2',title:'IG Story 2 frame — amplifikasi LinkedIn Senin',plat:'Story',day:'Senin',status:'done'},
+  {id:'w2-4',week:'W2',title:'Carousel 5 slide — 5 Alasan Website Lambat',plat:'Instagram',day:'Selasa',status:'done'},
+  {id:'w2-5',week:'W2',title:'Post LinkedIn Rabu Pendek — Website insight',plat:'LinkedIn',day:'Rabu',status:'done'},
+  {id:'w2-6',week:'W2',title:'Reels IG — demo PageSpeed Insights screen recording',plat:'Instagram',day:'Rabu',status:'done'},
+  {id:'w2-7',week:'W2',title:'Post LinkedIn Jumat Opini — Website & SEO',plat:'LinkedIn',day:'Jumat',status:'done'},
+  {id:'w2-8',week:'W2',title:'Infografis IG Jumat — Website performance ringkasan',plat:'Instagram',day:'Jumat',status:'done'},
+  {id:'w2-9',week:'W2',title:'Threads Utas Jumat [1/5]–[5/5] — Website & SEO',plat:'Threads',day:'Jumat',status:'done'},
+  {id:'w2-10',week:'W2',title:'GitHub push — website-performance-notes.md & seo-basics.md',plat:'GitHub',day:'Jumat',status:'done'},
+  {id:'w2-11',week:'W2',title:'Artikel Blog TU — Website Performance SEO',plat:'Blog',day:'Sabtu',status:'done'},
+
+  // ── W3 · Cybersecurity (SELESAI per 7 Juni 2026) ─────────────────────────
+  {id:'w3-1',week:'W3',title:'Post LinkedIn Senin Anchor — Human Element Cybersecurity',plat:'LinkedIn',day:'Senin',status:'done'},
+  {id:'w3-2',week:'W3',title:'Infografis Cybersecurity — LINDUNGI AKUNMU (portrait)',plat:'Instagram',day:'Senin',status:'done'},
+  {id:'w3-3',week:'W3',title:'IG Story 2 frame — amplifikasi LinkedIn Senin',plat:'Story',day:'Senin',status:'done'},
+  {id:'w3-4',week:'W3',title:'Threads Prompt Breakdown — Senin (ChatGPT) hacker aesthetic',plat:'Threads',day:'Senin',status:'done'},
+  {id:'w3-5',week:'W3',title:'Carousel 5 slide — SISTEM JEBOL (cover Varian A merah)',plat:'Instagram',day:'Selasa',status:'done'},
+  {id:'w3-6',week:'W3',title:'Threads Prompt Breakdown — Selasa (Gemini) P@ssw0rd123',plat:'Threads',day:'Selasa',status:'done'},
+  {id:'w3-7',week:'W3',title:'Threads Pure-Threads — Selasa sore (inline credential stuffing)',plat:'Threads',day:'Selasa',status:'done'},
+  {id:'w3-8',week:'W3',title:'Post LinkedIn Rabu Pendek — Credential stuffing / satu kunci semua pintu',plat:'LinkedIn',day:'Rabu',status:'done'},
+  {id:'w3-9',week:'W3',title:'Reels IG — demo HaveIBeenPwned screen recording (45–55 detik)',plat:'Instagram',day:'Rabu',status:'done'},
+  {id:'w3-10',week:'W3',title:'Threads Prompt Breakdown — Rabu (ChatGPT) satu kunci semua pintu',plat:'Threads',day:'Rabu',status:'done'},
+  {id:'w3-11',week:'W3',title:'Threads Prompt Breakdown — Kamis (ChatGPT/Gemini)',plat:'Threads',day:'Kamis',status:'done'},
+  {id:'w3-12',week:'W3',title:'Threads Pure-Threads — Kamis sore (inline topik Kamis)',plat:'Threads',day:'Kamis',status:'done'},
+  {id:'w3-13',week:'W3',title:'Post LinkedIn Jumat Opini — Cybersecurity list/opini',plat:'LinkedIn',day:'Jumat',status:'done'},
+  {id:'w3-14',week:'W3',title:'Infografis IG Jumat — Cybersecurity ringkasan',plat:'Instagram',day:'Jumat',status:'done'},
+  {id:'w3-15',week:'W3',title:'Threads Utas Jumat [1/5]–[5/5] — Cybersecurity',plat:'Threads',day:'Jumat',status:'done'},
+  {id:'w3-16',week:'W3',title:'GitHub push — cybersecurity/cybersecurity-notes.md',plat:'GitHub',day:'Jumat',status:'done'},
+  {id:'w3-17',week:'W3',title:'Artikel Blog TU Sabtu — Cybersecurity SEO',plat:'Blog',day:'Sabtu',status:'done'},
+
+  // ── W4 · AI & Produktivitas ───────────────────────────────────────────────
+  {id:'w4-1',week:'W4',title:'Post LinkedIn Senin Anchor — AI & Produktivitas',plat:'LinkedIn',day:'Senin',status:'done'},
+  {id:'w4-2',week:'W4',title:'Infografis AI — tips produktivitas (portrait)',plat:'Instagram',day:'Senin',status:'todo'},
+  {id:'w4-3',week:'W4',title:'IG Story 2 frame — amplifikasi LinkedIn Senin',plat:'Story',day:'Senin',status:'todo'},
+  {id:'w4-4',week:'W4',title:'Threads Prompt Breakdown — Senin (ChatGPT) AI visual',plat:'Threads',day:'Senin',status:'todo'},
+  {id:'w4-5',week:'W4',title:'Carousel 5 slide — AI tools yang benar-benar berguna',plat:'Instagram',day:'Selasa',status:'todo'},
+  {id:'w4-6',week:'W4',title:'Threads Prompt Breakdown — Selasa (Gemini) AI visual',plat:'Threads',day:'Selasa',status:'todo'},
+  {id:'w4-7',week:'W4',title:'Threads Pure-Threads — Selasa sore (inline topik AI)',plat:'Threads',day:'Selasa',status:'todo'},
+  {id:'w4-8',week:'W4',title:'Post LinkedIn Rabu Pendek — Prompt engineering / AI insight',plat:'LinkedIn',day:'Rabu',status:'todo'},
+  {id:'w4-9',week:'W4',title:'Reels IG — demo AI tool produktivitas screen recording',plat:'Instagram',day:'Rabu',status:'todo'},
+  {id:'w4-10',week:'W4',title:'Threads Prompt Breakdown — Rabu (ChatGPT) AI visual',plat:'Threads',day:'Rabu',status:'todo'},
+  {id:'w4-11',week:'W4',title:'Threads Prompt Breakdown — Kamis (ChatGPT/Gemini)',plat:'Threads',day:'Kamis',status:'todo'},
+  {id:'w4-12',week:'W4',title:'Threads Pure-Threads — Kamis sore (inline topik AI)',plat:'Threads',day:'Kamis',status:'todo'},
+  {id:'w4-13',week:'W4',title:'Post LinkedIn Jumat Opini — AI & Produktivitas list/opini',plat:'LinkedIn',day:'Jumat',status:'todo'},
+  {id:'w4-14',week:'W4',title:'Infografis IG Jumat — AI & Produktivitas ringkasan',plat:'Instagram',day:'Jumat',status:'todo'},
+  {id:'w4-15',week:'W4',title:'Threads Utas Jumat [1/5]–[5/5] — AI & Produktivitas',plat:'Threads',day:'Jumat',status:'todo'},
+  {id:'w4-16',week:'W4',title:'GitHub push — ai-productivity/ folder .md',plat:'GitHub',day:'Jumat',status:'todo'},
+  {id:'w4-17',week:'W4',title:'Artikel Blog TU Sabtu — AI & Produktivitas SEO',plat:'Blog',day:'Sabtu',status:'todo'},
+
+  // ── W5 · IT Career & Fresh Graduate ──────────────────────────────────────
+  {id:'w5-1',week:'W5',title:'⚠ Retrieve draft "Fresh Grad vs Senior" dari history dulu!',plat:'LinkedIn',day:'Senin',status:'todo'},
+  {id:'w5-2',week:'W5',title:'Infografis IT Career (portrait)',plat:'Instagram',day:'Senin',status:'todo'},
+  {id:'w5-3',week:'W5',title:'IG Story 2 frame — amplifikasi LinkedIn Senin',plat:'Story',day:'Senin',status:'todo'},
+  {id:'w5-4',week:'W5',title:'Threads Prompt Breakdown — Senin (ChatGPT) career visual',plat:'Threads',day:'Senin',status:'todo'},
+  {id:'w5-5',week:'W5',title:'Carousel 5 slide — IT Career tips fresh graduate',plat:'Instagram',day:'Selasa',status:'todo'},
+  {id:'w5-6',week:'W5',title:'Threads Prompt Breakdown — Selasa (Gemini) career visual',plat:'Threads',day:'Selasa',status:'todo'},
+  {id:'w5-7',week:'W5',title:'Threads Pure-Threads — Selasa sore (inline topik career)',plat:'Threads',day:'Selasa',status:'todo'},
+  {id:'w5-8',week:'W5',title:'Post LinkedIn Rabu Pendek — Skill IT di dunia kerja nyata',plat:'LinkedIn',day:'Rabu',status:'todo'},
+  {id:'w5-9',week:'W5',title:'Reels IG — screen recording roadmap karir IT / tips visual',plat:'Instagram',day:'Rabu',status:'todo'},
+  {id:'w5-10',week:'W5',title:'Threads Prompt Breakdown — Rabu (ChatGPT) career visual',plat:'Threads',day:'Rabu',status:'todo'},
+  {id:'w5-11',week:'W5',title:'Threads Prompt Breakdown — Kamis (ChatGPT/Gemini)',plat:'Threads',day:'Kamis',status:'todo'},
+  {id:'w5-12',week:'W5',title:'Threads Pure-Threads — Kamis sore (inline topik career)',plat:'Threads',day:'Kamis',status:'todo'},
+  {id:'w5-13',week:'W5',title:'Post LinkedIn Jumat Opini — IT Career list/opini',plat:'LinkedIn',day:'Jumat',status:'todo'},
+  {id:'w5-14',week:'W5',title:'Infografis IG Jumat — IT Career ringkasan',plat:'Instagram',day:'Jumat',status:'todo'},
+  {id:'w5-15',week:'W5',title:'Threads Utas Jumat [1/5]–[5/5] — IT Career',plat:'Threads',day:'Jumat',status:'todo'},
+  {id:'w5-16',week:'W5',title:'GitHub push — career/ folder .md',plat:'GitHub',day:'Jumat',status:'todo'},
+  {id:'w5-17',week:'W5',title:'Artikel Blog TU Sabtu — IT Career SEO',plat:'Blog',day:'Sabtu',status:'todo'},
+];
+
+const WEEKS_DEF = [
+  {w:1,theme:'Networking & Infrastructure',cycle:1},{w:2,theme:'Website & SEO',cycle:1},
+  {w:3,theme:'Cybersecurity',cycle:1},{w:4,theme:'AI & Produktivitas',cycle:1},{w:5,theme:'IT Career & Fresh Grad',cycle:1},
+  {w:6,theme:'Networking (Pendalaman)',cycle:2},{w:7,theme:'Website (Pendalaman)',cycle:2},
+  {w:8,theme:'Cybersecurity (Pendalaman)',cycle:2},{w:9,theme:'AI (Pendalaman)',cycle:2},{w:10,theme:'IT Career (Pendalaman)',cycle:2},
+  {w:11,theme:'Networking (Otoritas)',cycle:3},{w:12,theme:'Website (Otoritas)',cycle:3},
+  {w:13,theme:'Cybersecurity (Otoritas)',cycle:3},{w:14,theme:'AI (Otoritas)',cycle:3},{w:15,theme:'IT Career (Otoritas)',cycle:3},
+];
+
+const KPI_DEF = [
+  {id:'save',label:'IG Save Rate',unit:'%',target:5,plat:'Instagram',tip:'Target >5%'},
+  {id:'engage',label:'LinkedIn Eng. Rate',unit:'%',target:3,plat:'LinkedIn',tip:'Target >3%'},
+  {id:'li_follower',label:'LinkedIn Followers',unit:'',target:600,plat:'LinkedIn',tip:'Target 600 dalam 90 hari'},
+  {id:'li_search',label:'LinkedIn Search/minggu',unit:'',target:15,plat:'LinkedIn',tip:'Target 15+ search appearances/minggu'},
+  {id:'th_reply',label:'Threads Reply/utas',unit:'',target:2,plat:'Threads',tip:'Target >2 per utas Jumat'},
+  {id:'blog',label:'Blog Sessions/bulan',unit:'',target:100,plat:'Blog',tip:'Tumbuh setiap bulan'},
+];
+
+const LI_MILESTONES = {
+  1:[{text:'Update headline → menyebut IT Insights',def:true},{text:'Banner baru 1584×396px',def:true},{text:'About section final — siap paste',def:true},{text:'Update Featured section (slot 1 = post terbaik, slot 2 = Medium)',def:false}],
+  2:[{text:'Self-comment dalam 60 menit setiap post',def:false},{text:'Komentar substantif di 3–5 post IT profesional Indonesia per hari',def:false},{text:'Hashtag wajib setiap post: #ITInsights #CyberSecurity #TechForEveryone',def:false}],
+  3:[{text:'Minta 2–3 rekomendasi tertulis dari kolega/atasan',def:false},{text:'Launch LinkedIn Newsletter "IT Insights Weekly"',def:false}]
+};
+
+const LI_SCORES_DEF = [
+  {label:'Authority',cur:6.5,target:8},{label:'Branding',cur:8,target:9},
+  {label:'Content',cur:6,target:7.5},{label:'LinkedIn SEO',cur:4.5,target:7},
+  {label:'Trust',cur:7,target:8.5},{label:'Conversion',cur:3.5,target:6},
+];
+
+const GROWTH_DEF = [
+  {text:'Pin konten terbaik di IG + optimasi LinkedIn Featured',phase:'now'},
+  {text:'Setup Linktree + update bio Instagram',phase:'now'},
+  {text:'DM Welcome setiap follower baru',phase:'now'},
+  {text:'Engagement outbound 10 menit/hari',phase:'now'},
+  {text:'Weekly Data Review 15 menit setiap Minggu malam',phase:'now'},
+  {text:'Tandai IT Event Calendar 8–10 tanggal penting',phase:'now'},
+  {text:'GitHub README optimasi profil',phase:'now'},
+  {text:'IG Story Poll sebagai riset konten (mulai W4)',phase:'now'},
+  {text:'Cross-post IG Story → Threads',phase:'now'},
+  {text:'Evergreen Recycle System',phase:'f2'},
+  {text:'Strategic Mention di Threads (akun IT Indonesia yang relevan)',phase:'f2'},
+  {text:'LinkedIn Newsletter "IT Insights Weekly" launch',phase:'f3'},
+  {text:'Guest Post / Contribution ke publikasi IT Indonesia',phase:'f3'},
+];
+
+// ===== STATE =====
+let state = {
+  tasks: JSON.parse(JSON.stringify(TASKS_SEED)),
+  weekStatus: ['done','done','prog','todo','todo','todo','todo','todo','todo','todo','todo','todo','todo','todo','todo'],
+  kpiVals: KPI_DEF.map(()=>0),
+  conCells: Array(15).fill('skip'),
+  liChecks: {1:LI_MILESTONES[1].map(m=>m.def),2:LI_MILESTONES[2].map(()=>false),3:LI_MILESTONES[3].map(()=>false)},
+  growthStatus: GROWTH_DEF.map(()=>'todo'),
+};
+
+let activeWeek = 'W3';
+let activePlat = 'Semua';
+let addTargetCol = 'todo';
+const WEEK_ORDER = ['W1','W2','W3','W4','W5'];
+const PLATS = ['Semua','LinkedIn','Instagram','Threads','Blog','GitHub','Story'];
+const DOC_REF = doc(db, 'it-insights', 'dashboard');
+
+// ===== SYNC =====
+function setSyncing(s) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  if(s==='syncing'){dot.className='sync-dot syncing';lbl.textContent='Menyimpan...';}
+  else if(s==='ok'){dot.className='sync-dot';lbl.textContent='Tersimpan';}
+  else{dot.className='sync-dot error';lbl.textContent='Gagal konek';}
+}
+
+async function saveToFirebase() {
+  if(!isOwner) return;
+  setSyncing('syncing');
+  try { await setDoc(DOC_REF, state); setSyncing('ok'); }
+  catch(e) { console.error(e); setSyncing('error'); }
+}
+
+async function loadFromFirebase() {
+  try {
+    const snap = await getDoc(DOC_REF);
+    if(snap.exists()) {
+      const data = snap.data();
+      state = {...state, ...data};
+      // Merge: inject task dari TASKS_SEED yang belum ada di Firestore (berdasarkan id)
+      if(Array.isArray(state.tasks)) {
+        const existingIds = new Set(state.tasks.map(t=>t.id));
+        const newTasks = TASKS_SEED.filter(t=>!existingIds.has(t.id));
+        if(newTasks.length > 0) {
+          state.tasks = [...state.tasks, ...newTasks];
+          if(isOwner) await setDoc(DOC_REF, state);
+        }
+      }
+      if(!state.liChecks||typeof state.liChecks!=='object') {
+        state.liChecks = {1:LI_MILESTONES[1].map(m=>m.def),2:LI_MILESTONES[2].map(()=>false),3:LI_MILESTONES[3].map(()=>false)};
+      }
+    } else if(isOwner) {
+      await saveToFirebase();
+    }
+    setSyncing('ok');
+  } catch(e) { console.error(e); setSyncing('error'); }
+}
+
+// ===== AUTH =====
+function renderHeaderUser(user) {
+  const el = document.getElementById('header-user');
+  if(!user) {
+    el.innerHTML = `<button class="btn-signin-header" id="hdr-signin">Masuk</button>`;
+    document.getElementById('hdr-signin').onclick = () => doLogin();
+    return;
+  }
+  const initials = user.displayName ? user.displayName.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase() : '?';
+  el.innerHTML = `
+    <div class="user-chip" id="user-chip">
+      <div class="user-avatar">
+        ${user.photoURL ? `<img src="${user.photoURL}" alt="" />` : initials}
+      </div>
+      <span class="user-name">${user.displayName ? user.displayName.split(' ')[0] : 'User'}</span>
+    </div>
+  `;
+  document.getElementById('ud-name').textContent = user.displayName || '';
+  document.getElementById('ud-email').textContent = user.email || '';
+  document.getElementById('user-chip').onclick = (e) => {
+    e.stopPropagation();
+    document.getElementById('user-dropdown').classList.toggle('open');
+  };
+}
+
+function applyReadonlyState() {
+  const content = document.getElementById('main-content');
+  const banner = document.getElementById('readonly-banner');
+  if(isOwner) {
+    content.classList.remove('is-readonly');
+    banner.classList.remove('show');
+  } else {
+    content.classList.add('is-readonly');
+    banner.classList.add('show');
+  }
+}
+
+async function doLogin() {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    console.error('Login gagal:', e.message);
+  }
+}
+
+async function doLogout() {
+  document.getElementById('user-dropdown').classList.remove('open');
+  await signOut(auth);
+}
+
+document.getElementById('btn-google-login').onclick = doLogin;
+document.getElementById('btn-signout').onclick = doLogout;
+
+document.addEventListener('click', () => {
+  document.getElementById('user-dropdown').classList.remove('open');
+});
+
+// ===== NAV =====
+document.querySelectorAll('.main-nav button').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.main-nav button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  };
+});
+
+// ===== KANBAN =====
+function renderWeekTabs(){
+  const el=document.getElementById('week-tabs');
+  el.innerHTML='';
+  const WNAMES={W1:'W1 Networking',W2:'W2 Website',W3:'W3 Cybersec',W4:'W4 AI',W5:'W5 Career'};
+  WEEK_ORDER.forEach(w=>{
+    const btn=document.createElement('button');
+    btn.className='week-tab'+(w===activeWeek?' active':'');
+    btn.textContent=WNAMES[w];
+    btn.onclick=()=>{activeWeek=w;renderKanban();};
+    el.appendChild(btn);
+  });
+}
+
+function renderPlatFilters(){
+  const el=document.getElementById('plat-filters');
+  el.innerHTML='';
+  PLATS.forEach(p=>{
+    const btn=document.createElement('button');
+    btn.className='plat-btn'+(p===activePlat?' active':'');
+    btn.textContent=p;
+    btn.onclick=()=>{activePlat=p;renderKanbanBoard();renderKanbanStats();};
+    el.appendChild(btn);
+  });
+}
+
+function renderKanbanStats(){
+  const all=state.tasks.filter(t=>t.week===activeWeek);
+  const todo=all.filter(t=>t.status==='todo').length;
+  const prog=all.filter(t=>t.status==='prog').length;
+  const done=all.filter(t=>t.status==='done').length;
+  const pct=all.length?Math.round(done/all.length*100):0;
+  document.getElementById('kb-stats').innerHTML=`
+    <div class="kb-stat"><div class="kb-stat-n">${todo}</div><div class="kb-stat-l">To Do</div></div>
+    <div class="kb-stat"><div class="kb-stat-n red">${prog}</div><div class="kb-stat-l">On Progress</div></div>
+    <div class="kb-stat"><div class="kb-stat-n green">${done}</div><div class="kb-stat-l">Done</div></div>
+    <div class="kb-stat"><div class="kb-stat-n">${pct}%</div><div class="kb-stat-l">Progress</div></div>
+  `;
+  document.getElementById('kb-prog-bar').style.width=pct+'%';
+}
+
+function renderKanbanBoard(){
+  const filtered=state.tasks.filter(t=>t.week===activeWeek&&(activePlat==='Semua'||t.plat===activePlat));
+  const buckets={todo:[],prog:[],done:[]};
+  filtered.forEach(t=>(buckets[t.status]||buckets.todo).push(t));
+  ['todo','prog','done'].forEach(s=>{
+    const el=document.getElementById('list-'+s);
+    el.innerHTML='';
+    buckets[s].forEach(t=>{
+      const nextS=s==='todo'?'prog':s==='prog'?'done':'todo';
+      const nextL=s==='todo'?'Mulai →':s==='prog'?'Selesai ✓':'↩ Buka lagi';
+      const div=document.createElement('div');
+      div.className='kb-card'+(s==='done'?' done':'');
+      div.innerHTML=`
+        <div class="kb-card-top"><span class="kb-card-title">${t.title}</span><span class="plat-badge badge-${t.plat}">${t.plat}</span></div>
+        <div class="kb-card-meta">📅 ${t.day}</div>
+        <button class="kb-move-btn" data-id="${t.id}" data-next="${nextS}">${nextL}</button>
+      `;
+      el.appendChild(div);
+    });
+    document.getElementById('cnt-'+s).textContent=buckets[s].length;
+  });
+  document.querySelectorAll('.kb-move-btn').forEach(btn=>{
+    btn.onclick=e=>{
+      e.stopPropagation();
+      if(!isOwner) return;
+      const t=state.tasks.find(x=>x.id===btn.dataset.id);
+      if(t){t.status=btn.dataset.next;saveToFirebase();renderKanbanBoard();renderKanbanStats();}
+    };
+  });
+}
+
+function renderKanban(){renderWeekTabs();renderKanbanStats();renderKanbanBoard();}
+
+document.querySelectorAll('.kb-add-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    if(!isOwner) return;
+    addTargetCol=btn.dataset.col;
+    document.getElementById('f-title').value='';
+    document.getElementById('f-week').value=activeWeek;
+    document.getElementById('modal').classList.add('open');
+  };
+});
+document.getElementById('modal-cancel').onclick=()=>document.getElementById('modal').classList.remove('open');
+document.getElementById('modal-save').onclick=()=>{
+  if(!isOwner) return;
+  const title=document.getElementById('f-title').value.trim();
+  if(!title)return;
+  state.tasks.push({id:'c'+Date.now(),week:document.getElementById('f-week').value,title,plat:document.getElementById('f-plat').value,day:document.getElementById('f-day').value,status:addTargetCol});
+  saveToFirebase();
+  document.getElementById('modal').classList.remove('open');
+  renderKanban();
+};
+
+// ===== ROADMAP =====
+function renderRoadmap(){
+  [1,2,3].forEach((cy,ci)=>{
+    const el=document.getElementById('wc-s'+cy);
+    el.innerHTML='';
+    WEEKS_DEF.filter(w=>w.cycle===cy).forEach((w,i)=>{
+      const gi=(ci*5)+i;
+      const st=state.weekStatus[gi]||'todo';
+      const div=document.createElement('div');
+      div.className=`w-card ${st}`;
+      const badges=['pill-s1','pill-s2','pill-s3'];
+      const stL=st==='done'?'✓ Selesai':st==='prog'?'● Berjalan':'○ Belum';
+      div.innerHTML=`<span class="w-badge cycle-pill ${badges[ci]}">${['S1','S2','S3'][ci]}</span><div class="w-num">W${w.w}</div><div class="w-theme">${w.theme}</div><div class="w-status ${st}">${stL}</div>`;
+      div.onclick=()=>{
+        if(!isOwner) return;
+        const o=['todo','prog','done'];
+        state.weekStatus[gi]=o[(o.indexOf(state.weekStatus[gi])+1)%3];
+        saveToFirebase();renderRoadmap();
+      };
+      el.appendChild(div);
+    });
+  });
+  const done=state.weekStatus.slice(0,5).filter(s=>s==='done').length;
+  const pct=Math.round(done/5*100);
+  document.getElementById('rs-fill').style.width=pct+'%';
+  document.getElementById('rs-pct').textContent=done+'/5 ('+pct+'%)';
+}
+
+// ===== KPI =====
+function renderKPI(){
+  const grid=document.getElementById('kpi-grid');
+  grid.innerHTML='';
+  KPI_DEF.forEach((k,i)=>{
+    const v=state.kpiVals[i]||0;
+    const pct=Math.min(100,Math.round(v/k.target*100));
+    const barColor=pct>=100?'var(--green)':pct>=60?'var(--red)':'#e24b4a';
+    const div=document.createElement('div');
+    div.className='kpi-card';
+    div.innerHTML=`
+      <div class="kpi-plat">${k.plat}</div>
+      <div class="kpi-name">${k.label}</div>
+      <div class="kpi-val">${v}${k.unit}</div>
+      <div class="kpi-target">Target: ${k.target}${k.unit} · ${k.tip}</div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar-fill" style="width:${pct}%;background:${barColor};"></div></div>
+      <div class="kpi-input-row">
+        <input type="number" id="kii-${i}" value="${v}" min="0" />
+        <button class="kpi-save-btn" data-i="${i}">Simpan</button>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+  grid.querySelectorAll('.kpi-save-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      if(!isOwner) return;
+      const i=parseInt(btn.dataset.i);
+      const v=parseFloat(document.getElementById('kii-'+i).value);
+      if(!isNaN(v)){state.kpiVals[i]=v;saveToFirebase();renderKPI();}
+    };
+  });
+  const labEl=document.getElementById('con-labels');
+  const gridEl=document.getElementById('con-grid');
+  labEl.innerHTML='';gridEl.innerHTML='';
+  for(let i=0;i<15;i++){
+    const l=document.createElement('div');l.className='con-lbl';l.textContent='W'+(i+1);labEl.appendChild(l);
+    const c=document.createElement('div');
+    c.className='con-cell '+(state.conCells[i]||'skip');
+    c.onclick=()=>{
+      if(!isOwner) return;
+      const o=['skip','hit','miss'];
+      state.conCells[i]=o[(o.indexOf(state.conCells[i])+1)%3];
+      saveToFirebase();renderKPI();
+    };
+    gridEl.appendChild(c);
+  }
+}
+
+// ===== LINKEDIN =====
+function renderLinkedIn(){
+  const scEl=document.getElementById('li-scores');
+  scEl.innerHTML='';
+  LI_SCORES_DEF.forEach(s=>{
+    const pct=Math.round(s.cur/10*100);
+    const div=document.createElement('div');
+    div.className='li-score-card';
+    div.innerHTML=`<div class="li-score-label">${s.label}</div><div class="li-score-row"><span class="li-score-num">${s.cur}/10</span><div class="li-score-bar"><div class="li-score-fill" style="width:${pct}%;"></div></div><span class="li-score-target">→ ${s.target}</span></div>`;
+    scEl.appendChild(div);
+  });
+  [1,2,3].forEach(ph=>{
+    const el=document.getElementById('li-list-'+ph);
+    el.innerHTML='';
+    LI_MILESTONES[ph].forEach((m,i)=>{
+      const done=(state.liChecks[ph]||[])[i]||false;
+      const row=document.createElement('div');
+      row.className='li-item';
+      row.innerHTML=`<div class="li-check${done?' done':''}" data-ph="${ph}" data-i="${i}"></div><div class="li-text${done?' crossed':''}">${m.text}</div>`;
+      el.appendChild(row);
+    });
+  });
+  document.querySelectorAll('.li-check').forEach(el=>{
+    el.onclick=()=>{
+      if(!isOwner) return;
+      const ph=parseInt(el.dataset.ph),i=parseInt(el.dataset.i);
+      if(!state.liChecks[ph]) state.liChecks[ph]=[];
+      state.liChecks[ph][i]=!state.liChecks[ph][i];
+      saveToFirebase();renderLinkedIn();
+    };
+  });
+}
+
+// ===== GROWTH =====
+function renderGrowth(){
+  const el=document.getElementById('growth-list');
+  el.innerHTML='';
+  const phL={now:'Sekarang',f2:'Fase 2',f3:'Fase 3'};
+  const phC={now:'gphase-now',f2:'gphase-f2',f3:'gphase-f3'};
+  GROWTH_DEF.forEach((g,i)=>{
+    const st=state.growthStatus[i]||'todo';
+    const stL=st==='todo'?'Belum':st==='prog'?'On Progress':'Selesai ✓';
+    const stC=st==='prog'?'s-prog':st==='done'?'s-done':'';
+    const row=document.createElement('div');
+    row.className='growth-row';
+    row.innerHTML=`
+      <span class="growth-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="growth-text">${g.text}</span>
+      <span class="growth-phase ${phC[g.phase]}">${phL[g.phase]}</span>
+      <button class="growth-status-btn ${stC}" data-i="${i}">${stL}</button>
+    `;
+    el.appendChild(row);
+  });
+  document.querySelectorAll('.growth-status-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      if(!isOwner) return;
+      const i=parseInt(btn.dataset.i);
+      const o=['todo','prog','done'];
+      state.growthStatus[i]=o[(o.indexOf(state.growthStatus[i])+1)%3];
+      saveToFirebase();renderGrowth();
+    };
+  });
+}
+
+function renderAll(){
+  renderPlatFilters();
+  renderKanban();
+  renderRoadmap();
+  renderKPI();
+  renderLinkedIn();
+  renderGrowth();
+}
+
+// ===== INIT =====
+const d = new Date();
+document.getElementById('hdr-date').innerHTML =
+  d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'<br>@seandyarozano';
+
+const loadingScreen = document.getElementById('loading-screen');
+const loginScreen = document.getElementById('login-screen');
+
+// Auth state listener — titik masuk utama
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  isOwner = user ? user.email === OWNER_EMAIL : false;
+
+  renderHeaderUser(user);
+
+  if(!user) {
+    // Belum login → tampilkan halaman login
+    document.getElementById('loading-msg').textContent = 'Siap...';
+    loadingScreen.style.opacity = '0';
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+      loginScreen.classList.add('show');
+    }, 300);
+    return;
+  }
+
+  // Sudah login → load data lalu render
+  loginScreen.classList.remove('show');
+  loadingScreen.style.display = 'flex';
+  loadingScreen.style.opacity = '1';
+  document.getElementById('loading-msg').textContent = isOwner
+    ? 'Memuat data dashboard...'
+    : 'Memuat data (mode view only)...';
+
+  await loadFromFirebase();
+  applyReadonlyState();
+  renderAll();
+
+  loadingScreen.style.opacity = '0';
+  setTimeout(() => loadingScreen.style.display = 'none', 400);
+});
+</script>
+</body>
+</html>

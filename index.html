@@ -26,7 +26,7 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var(--black); min-height: 100vh; font-size: 14px; }
- 
+
 /* LOADING */
 #loading-screen {
   position: fixed; inset: 0; background: var(--red);
@@ -37,7 +37,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 #loading-screen p { color: rgba(255,255,255,0.65); font-size: 13px; margin-top: 8px; }
 .spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; margin-bottom: 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
- 
+
 /* LOGIN SCREEN */
 #login-screen {
   display: none; position: fixed; inset: 0;
@@ -94,7 +94,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .btn-google:hover { border-color: var(--gray-400); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
 .login-note { font-size: 11px; color: var(--gray-400); margin-top: 16px; line-height: 1.5; }
- 
+
 /* READ-ONLY BANNER */
 #readonly-banner {
   display: none;
@@ -106,7 +106,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
   text-align: center;
 }
 #readonly-banner.show { display: block; }
- 
+
 /* HEADER */
 .site-header { background: var(--red); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 .site-header h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; color: #fff; letter-spacing: .02em; }
@@ -117,7 +117,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .sync-dot.syncing { background: #ffeb3b; animation: pulse .8s ease-in-out infinite; }
 .sync-dot.error { background: #ff5252; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
- 
+
 /* USER CHIP */
 .user-chip {
   display: flex; align-items: center; gap: 7px;
@@ -137,7 +137,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 }
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .user-name { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 500; }
- 
+
 /* SIGN IN BTN (header, when not logged in) */
 .btn-signin-header {
   font-size: 12px;
@@ -151,9 +151,9 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
   transition: all .15s;
 }
 .btn-signin-header:hover { background: rgba(255,255,255,0.15); }
- 
+
 .header-date { font-size: 11px; color: rgba(255,255,255,0.6); text-align: right; }
- 
+
 /* USER DROPDOWN */
 .user-dropdown {
   display: none;
@@ -182,13 +182,13 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .ud-btn:hover { background: var(--gray-100); color: var(--black); }
 .ud-btn.danger { color: #c62828; }
 .ud-btn.danger:hover { background: #fff0f0; }
- 
+
 /* NAV */
 .main-nav { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 0 24px; display: flex; gap: 0; overflow-x: auto; }
 .main-nav button { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 500; padding: 13px 18px; border: none; background: transparent; color: var(--gray-600); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; }
 .main-nav button:hover { color: var(--black); }
 .main-nav button.active { color: var(--red); border-bottom-color: var(--red); }
- 
+
 /* CONTENT */
 .content { padding: 20px 24px; max-width: 1100px; margin: 0 auto; }
 .panel { display: none; }
@@ -196,7 +196,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: .03em; color: var(--black); margin-bottom: 4px; }
 .section-sub { font-size: 12px; color: var(--gray-400); margin-bottom: 16px; }
 .card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 16px 20px; }
- 
+
 /* DISABLED STATE */
 .is-readonly .kb-move-btn,
 .is-readonly .kb-add-btn,
@@ -209,7 +209,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
   opacity: 0.5 !important;
   cursor: not-allowed !important;
 }
- 
+
 /* KANBAN */
 .kanban-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
 .week-tabs { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -255,7 +255,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .kb-move-btn:hover { border-color: var(--red); color: var(--red); }
 .kb-add-btn { width: 100%; font-size: 12px; padding: 7px; border: 1px dashed var(--gray-200); border-radius: var(--radius); background: transparent; color: var(--gray-400); cursor: pointer; font-family: 'Barlow', sans-serif; text-align: left; transition: all .15s; margin-top: 2px; }
 .kb-add-btn:hover { border-color: var(--red); color: var(--red); }
- 
+
 /* MODAL */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.open { display: flex; }
@@ -268,7 +268,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .btn-primary { flex: 1; padding: 9px; background: var(--red); color: #fff; border: none; border-radius: var(--radius); font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; }
 .btn-primary:hover { background: var(--red-dark); }
 .btn-secondary { flex: 1; padding: 9px; background: transparent; color: var(--gray-600); border: 1px solid var(--gray-200); border-radius: var(--radius); font-family: 'Barlow', sans-serif; font-size: 13px; cursor: pointer; }
- 
+
 /* ROADMAP */
 .cycle-section { margin-bottom: 18px; }
 .cycle-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-600); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
@@ -298,7 +298,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .roadmap-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
 .rl { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray-600); }
 .rl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
- 
+
 /* KPI */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(155px,1fr)); gap: 10px; margin-bottom: 18px; }
 .kpi-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 14px 16px; }
@@ -327,7 +327,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .con-legend { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
 .con-leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray-600); }
 .con-leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
- 
+
 /* LINKEDIN */
 .li-scores { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 8px; margin-bottom: 18px; }
 .li-score-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 10px 12px; }
@@ -352,7 +352,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .li-check.done::after { content: ''; width: 6px; height: 4px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translate(1px,0); }
 .li-text { font-size: 12px; color: var(--black); line-height: 1.5; flex: 1; }
 .li-text.crossed { color: var(--gray-400); text-decoration: line-through; }
- 
+
 /* GROWTH */
 .growth-list { display: flex; flex-direction: column; }
 .growth-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--gray-100); }
@@ -367,19 +367,19 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
 .growth-status-btn:hover { border-color: var(--red); color: var(--red); }
 .growth-status-btn.s-prog { background: var(--red); color: #fff; border-color: var(--red); }
 .growth-status-btn.s-done { background: var(--green); color: #fff; border-color: var(--green); }
- 
+
 .site-footer { text-align: center; padding: 20px; font-size: 11px; color: var(--gray-400); margin-top: 20px; border-top: 1px solid var(--gray-200); }
 </style>
 </head>
 <body>
- 
+
 <!-- LOADING -->
 <div id="loading-screen">
   <div class="spinner"></div>
   <h1>IT INSIGHTS</h1>
   <p id="loading-msg">Menghubungkan ke database...</p>
 </div>
- 
+
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
@@ -398,12 +398,12 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     <p class="login-note">Dashboard ini hanya untuk @seandyarozano.<br>Akun lain bisa melihat tapi tidak bisa mengedit.</p>
   </div>
 </div>
- 
+
 <!-- READ-ONLY BANNER -->
 <div id="readonly-banner">
   👁 Kamu sedang dalam mode <strong>view only</strong>. Login sebagai @seandyarozano untuk mengedit.
 </div>
- 
+
 <!-- HEADER -->
 <header class="site-header">
   <h1><span>IT INSIGHTS · @seandyarozano</span>Dashboard Media Sosial</h1>
@@ -413,7 +413,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     <div class="header-date" id="hdr-date"></div>
   </div>
 </header>
- 
+
 <!-- USER DROPDOWN -->
 <div class="user-dropdown" id="user-dropdown">
   <div class="ud-info">
@@ -425,7 +425,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     Keluar
   </button>
 </div>
- 
+
 <nav class="main-nav">
   <button class="active" data-tab="kanban">📋 Kanban</button>
   <button data-tab="roadmap">🗺 Roadmap 15W</button>
@@ -433,9 +433,9 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
   <button data-tab="linkedin">💼 LinkedIn 90-Day</button>
   <button data-tab="growth">🚀 Growth Program</button>
 </nav>
- 
+
 <div class="content" id="main-content">
- 
+
 <!-- KANBAN -->
 <div class="panel active" id="tab-kanban">
   <div class="section-title">Kanban Content Board</div>
@@ -462,7 +462,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     </div>
   </div>
 </div>
- 
+
 <!-- ROADMAP -->
 <div class="panel" id="tab-roadmap">
   <div class="section-title">Roadmap 15 Minggu</div>
@@ -481,7 +481,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     <div class="rl"><div class="rl-dot" style="background:var(--gray-200);"></div>Belum dimulai</div>
   </div>
 </div>
- 
+
 <!-- KPI -->
 <div class="panel" id="tab-kpi">
   <div class="section-title">KPI Tracker</div>
@@ -499,7 +499,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     </div>
   </div>
 </div>
- 
+
 <!-- LINKEDIN -->
 <div class="panel" id="tab-linkedin">
   <div class="section-title">LinkedIn 90-Day Plan</div>
@@ -520,20 +520,20 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     </div>
   </div>
 </div>
- 
+
 <!-- GROWTH -->
 <div class="panel" id="tab-growth">
   <div class="section-title">Growth Program</div>
   <p class="section-sub">13 program dari Bagian 16 master doc. Klik status untuk toggle.</p>
   <div class="card"><div class="growth-list" id="growth-list"></div></div>
 </div>
- 
+
 </div>
- 
+
 <footer class="site-footer">
-  IT Insights Dashboard Media Sosial · @seandyarozano · Powered by Firebase · 2026
+  IT Insights Dashboard Media Sosial · @seandyarozano · Powered by Firebase · v2.5 · 15 Juni 2026
 </footer>
- 
+
 <!-- MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
@@ -558,12 +558,12 @@ body { font-family: 'Barlow', sans-serif; background: var(--gray-50); color: var
     </div>
   </div>
 </div>
- 
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
- 
+
 const firebaseConfig = {
   apiKey: "AIzaSyCIsPR3DZg974vmuIYvi6bO9V-i-8QL2xY",
   authDomain: "it-insights-dashboard.firebaseapp.com",
@@ -572,18 +572,18 @@ const firebaseConfig = {
   messagingSenderId: "626801477549",
   appId: "1:626801477549:web:0b9e6e221942da7cdc8324"
 };
- 
+
 // Email yang diizinkan untuk edit — ganti dengan email Google kamu
 const OWNER_EMAIL = "seandyarozano@gmail.com";
- 
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
- 
+
 let currentUser = null;
 let isOwner = false;
- 
+
 // ===== DEFAULT DATA =====
 const TASKS_SEED = [
   {id:'w1-1',week:'W1',title:'Post LinkedIn Anchor — Pelajaran Networking Sehari-hari',plat:'LinkedIn',day:'Senin',status:'done'},
@@ -593,14 +593,14 @@ const TASKS_SEED = [
   {id:'w1-5',week:'W1',title:'Infografis Cloudflare',plat:'Instagram',day:'Rabu',status:'done'},
   {id:'w1-6',week:'W1',title:'Threads Utas Jumat — Networking',plat:'Threads',day:'Jumat',status:'done'},
   {id:'w1-7',week:'W1',title:'GitHub push — routing-table-explained.md & dns-for-beginners.md',plat:'GitHub',day:'Jumat',status:'done'},
-  {id:'w1-8',week:'W1',title:'Artikel Medium — Cloudflare Outage',plat:'Blog',day:'Sabtu',status:'done'},
+  {id:'w1-8',week:'W1',title:'Artikel Blog TU — Cloudflare Outage',plat:'Blog',day:'Sabtu',status:'done'},
   {id:'w2-1',week:'W2',title:'Post LinkedIn Anchor — Website Lambat Padahal Internet Kencang',plat:'LinkedIn',day:'Senin',status:'done'},
   {id:'w2-2',week:'W2',title:'Infografis Website Lambat (portrait & landscape)',plat:'Instagram',day:'Senin',status:'done'},
   {id:'w2-3',week:'W2',title:'Carousel 5 slide — 5 Alasan Website Lambat',plat:'Instagram',day:'Selasa',status:'done'},
   {id:'w2-4',week:'W2',title:'IG Story 2 frame — amplifikasi LinkedIn',plat:'Story',day:'Senin',status:'done'},
   {id:'w2-5',week:'W2',title:'Threads Utas Jumat — Website & SEO',plat:'Threads',day:'Jumat',status:'done'},
   {id:'w2-6',week:'W2',title:'GitHub push — website-performance-notes.md & seo-basics.md',plat:'GitHub',day:'Jumat',status:'done'},
-  {id:'w2-7',week:'W2',title:'Artikel Medium — Website Performance',plat:'Blog',day:'Sabtu',status:'done'},
+  {id:'w2-7',week:'W2',title:'Artikel Blog TU — Website Performance',plat:'Blog',day:'Sabtu',status:'done'},
   {id:'w3-1',week:'W3',title:'Post LinkedIn Senin Anchor — Cybersecurity intro',plat:'LinkedIn',day:'Senin',status:'prog'},
   {id:'w3-2',week:'W3',title:'Infografis Cybersecurity (portrait LinkedIn)',plat:'Instagram',day:'Senin',status:'prog'},
   {id:'w3-3',week:'W3',title:'IG Story 2 frame — amplifikasi LinkedIn Senin',plat:'Story',day:'Senin',status:'todo'},
@@ -617,18 +617,43 @@ const TASKS_SEED = [
   {id:'w3-14',week:'W3',title:'Infografis IG Jumat — Cybersecurity',plat:'Instagram',day:'Jumat',status:'todo'},
   {id:'w3-15',week:'W3',title:'Threads Utas Jumat [1/5]–[5/5] — Cybersecurity',plat:'Threads',day:'Jumat',status:'todo'},
   {id:'w3-16',week:'W3',title:'GitHub push — cybersecurity/ folder .md',plat:'GitHub',day:'Jumat',status:'todo'},
-  {id:'w3-17',week:'W3',title:'Artikel Blog/Medium Sabtu — Cybersecurity SEO',plat:'Blog',day:'Sabtu',status:'todo'},
-  {id:'w4-1',week:'W4',title:'Post LinkedIn Senin Anchor — AI & Produktivitas',plat:'LinkedIn',day:'Senin',status:'todo'},
-  {id:'w4-2',week:'W4',title:'Carousel IG — AI tools yang benar-benar berguna',plat:'Instagram',day:'Selasa',status:'todo'},
-  {id:'w4-3',week:'W4',title:'Reels IG — demo AI tool produktivitas',plat:'Instagram',day:'Rabu',status:'todo'},
-  {id:'w4-4',week:'W4',title:'GitHub push — ai-productivity/ folder',plat:'GitHub',day:'Jumat',status:'todo'},
-  {id:'w4-5',week:'W4',title:'Artikel Blog/Medium — AI & Produktivitas SEO',plat:'Blog',day:'Sabtu',status:'todo'},
-  {id:'w5-1',week:'W5',title:'⚠ Retrieve draft "Fresh Grad vs Senior" dari history dulu!',plat:'LinkedIn',day:'Senin',status:'todo'},
-  {id:'w5-2',week:'W5',title:'Carousel IG — IT Career tips fresh graduate',plat:'Instagram',day:'Selasa',status:'todo'},
-  {id:'w5-3',week:'W5',title:'GitHub push — career/ folder',plat:'GitHub',day:'Jumat',status:'todo'},
-  {id:'w5-4',week:'W5',title:'Artikel Blog/Medium — IT Career SEO',plat:'Blog',day:'Sabtu',status:'todo'},
+  {id:'w3-17',week:'W3',title:'Artikel Blog TU Sabtu — Cybersecurity SEO',plat:'Blog',day:'Sabtu',status:'todo'},
+  {id:'w4-1',week:'W4',title:'LinkedIn Senin Anchor — AI & Produktivitas + infografis',plat:'LinkedIn',day:'Senin',status:'done'},
+  {id:'w4-2',week:'W4',title:'IG Story 2 frame amplifikasi',plat:'Instagram',day:'Senin',status:'done'},
+  {id:'w4-3',week:'W4',title:'Threads Prompt Breakdown Senin — ChatGPT',plat:'Threads',day:'Senin',status:'done'},
+  {id:'w4-4',week:'W4',title:'Carousel IG 5 slide — AI & Produktivitas',plat:'Instagram',day:'Selasa',status:'done'},
+  {id:'w4-5',week:'W4',title:'Threads Prompt Breakdown Selasa — Gemini',plat:'Threads',day:'Selasa',status:'done'},
+  {id:'w4-6',week:'W4',title:'Threads Pure-Threads Selasa sore',plat:'Threads',day:'Selasa',status:'done'},
+  {id:'w4-7',week:'W4',title:'LinkedIn Rabu post pendek',plat:'LinkedIn',day:'Rabu',status:'done'},
+  {id:'w4-8',week:'W4',title:'Reels IG — demo AI tool produktivitas',plat:'Instagram',day:'Rabu',status:'done'},
+  {id:'w4-9',week:'W4',title:'Threads Prompt Breakdown Rabu — ChatGPT',plat:'Threads',day:'Rabu',status:'done'},
+  {id:'w4-10',week:'W4',title:'Threads Prompt Breakdown Kamis — ChatGPT/Gemini',plat:'Threads',day:'Kamis',status:'done'},
+  {id:'w4-11',week:'W4',title:'Threads Pure-Threads Kamis sore',plat:'Threads',day:'Kamis',status:'done'},
+  {id:'w4-12',week:'W4',title:'LinkedIn Jumat post opini',plat:'LinkedIn',day:'Jumat',status:'done'},
+  {id:'w4-13',week:'W4',title:'Infografis IG Jumat — AI & Produktivitas',plat:'Instagram',day:'Jumat',status:'done'},
+  {id:'w4-14',week:'W4',title:'Threads Utas [1/5]–[5/5] Jumat',plat:'Threads',day:'Jumat',status:'done'},
+  {id:'w4-15',week:'W4',title:'GitHub push — ai-productivity/ folder',plat:'GitHub',day:'Sabtu',status:'done'},
+  {id:'w4-16',week:'W4',title:'Artikel Blog TU — AI & Produktivitas SEO',plat:'Blog',day:'Sabtu',status:'done'},
+  {id:'w4-17',week:'W4',title:'README profile GitHub update W4',plat:'GitHub',day:'Sabtu',status:'done'},
+  {id:'w5-1',week:'W5',title:'LinkedIn Senin Anchor — Fresh Grad IT yang luar biasa',plat:'LinkedIn',day:'Senin',status:'done'},
+  {id:'w5-2',week:'W5',title:'IG Story 2 frame amplifikasi',plat:'Instagram',day:'Senin',status:'done'},
+  {id:'w5-3',week:'W5',title:'Threads Prompt Breakdown Senin — ChatGPT',plat:'Threads',day:'Senin',status:'done'},
+  {id:'w5-4',week:'W5',title:'Carousel IG 5 slide — IT Career tips fresh graduate',plat:'Instagram',day:'Selasa',status:'todo'},
+  {id:'w5-5',week:'W5',title:'Threads Prompt Breakdown Selasa — Gemini',plat:'Threads',day:'Selasa',status:'todo'},
+  {id:'w5-6',week:'W5',title:'Threads Pure-Threads Selasa sore',plat:'Threads',day:'Selasa',status:'todo'},
+  {id:'w5-7',week:'W5',title:'LinkedIn Rabu post pendek',plat:'LinkedIn',day:'Rabu',status:'todo'},
+  {id:'w5-8',week:'W5',title:'Reels IG — IT Career topic',plat:'Instagram',day:'Rabu',status:'todo'},
+  {id:'w5-9',week:'W5',title:'Threads Prompt Breakdown Rabu — ChatGPT',plat:'Threads',day:'Rabu',status:'todo'},
+  {id:'w5-10',week:'W5',title:'Threads Prompt Breakdown Kamis — ChatGPT/Gemini',plat:'Threads',day:'Kamis',status:'todo'},
+  {id:'w5-11',week:'W5',title:'Threads Pure-Threads Kamis sore',plat:'Threads',day:'Kamis',status:'todo'},
+  {id:'w5-12',week:'W5',title:'LinkedIn Jumat post opini',plat:'LinkedIn',day:'Jumat',status:'todo'},
+  {id:'w5-13',week:'W5',title:'Infografis IG Jumat — IT Career',plat:'Instagram',day:'Jumat',status:'todo'},
+  {id:'w5-14',week:'W5',title:'Threads Utas [1/5]–[5/5] Jumat',plat:'Threads',day:'Jumat',status:'todo'},
+  {id:'w5-15',week:'W5',title:'GitHub push — career/ folder',plat:'GitHub',day:'Sabtu',status:'todo'},
+  {id:'w5-16',week:'W5',title:'Artikel Blog TU — IT Career SEO',plat:'Blog',day:'Sabtu',status:'todo'},
+  {id:'w5-17',week:'W5',title:'README profile GitHub update W5',plat:'GitHub',day:'Sabtu',status:'todo'},
 ];
- 
+
 const WEEKS_DEF = [
   {w:1,theme:'Networking & Infrastructure',cycle:1},{w:2,theme:'Website & SEO',cycle:1},
   {w:3,theme:'Cybersecurity',cycle:1},{w:4,theme:'AI & Produktivitas',cycle:1},{w:5,theme:'IT Career & Fresh Grad',cycle:1},
@@ -637,7 +662,7 @@ const WEEKS_DEF = [
   {w:11,theme:'Networking (Otoritas)',cycle:3},{w:12,theme:'Website (Otoritas)',cycle:3},
   {w:13,theme:'Cybersecurity (Otoritas)',cycle:3},{w:14,theme:'AI (Otoritas)',cycle:3},{w:15,theme:'IT Career (Otoritas)',cycle:3},
 ];
- 
+
 const KPI_DEF = [
   {id:'save',label:'IG Save Rate',unit:'%',target:5,plat:'Instagram',tip:'Target >5%'},
   {id:'engage',label:'LinkedIn Eng. Rate',unit:'%',target:3,plat:'LinkedIn',tip:'Target >3%'},
@@ -646,19 +671,19 @@ const KPI_DEF = [
   {id:'th_reply',label:'Threads Reply/utas',unit:'',target:2,plat:'Threads',tip:'Target >2 per utas Jumat'},
   {id:'blog',label:'Blog Sessions/bulan',unit:'',target:100,plat:'Blog',tip:'Tumbuh setiap bulan'},
 ];
- 
+
 const LI_MILESTONES = {
-  1:[{text:'Update headline → menyebut IT Insights',def:true},{text:'Banner baru 1584×396px',def:true},{text:'About section final — siap paste',def:true},{text:'Update Featured section (slot 1 = post terbaik, slot 2 = Medium)',def:false}],
+  1:[{text:'Update headline → menyebut IT Insights',def:true},{text:'Banner baru 1584×396px',def:true},{text:'About section final — siap paste',def:true},{text:'Update Featured section (slot 1 = post terbaik, slot 2 = Blog TU)',def:false}],
   2:[{text:'Self-comment dalam 60 menit setiap post',def:false},{text:'Komentar substantif di 3–5 post IT profesional Indonesia per hari',def:false},{text:'Hashtag wajib setiap post: #ITInsights #CyberSecurity #TechForEveryone',def:false}],
   3:[{text:'Minta 2–3 rekomendasi tertulis dari kolega/atasan',def:false},{text:'Launch LinkedIn Newsletter "IT Insights Weekly"',def:false}]
 };
- 
+
 const LI_SCORES_DEF = [
   {label:'Authority',cur:6.5,target:8},{label:'Branding',cur:8,target:9},
   {label:'Content',cur:6,target:7.5},{label:'LinkedIn SEO',cur:4.5,target:7},
   {label:'Trust',cur:7,target:8.5},{label:'Conversion',cur:3.5,target:6},
 ];
- 
+
 const GROWTH_DEF = [
   {text:'Pin konten terbaik di IG + optimasi LinkedIn Featured',phase:'now'},
   {text:'Setup Linktree + update bio Instagram',phase:'now'},
@@ -674,24 +699,24 @@ const GROWTH_DEF = [
   {text:'LinkedIn Newsletter "IT Insights Weekly" launch',phase:'f3'},
   {text:'Guest Post / Contribution ke publikasi IT Indonesia',phase:'f3'},
 ];
- 
+
 // ===== STATE =====
 let state = {
   tasks: JSON.parse(JSON.stringify(TASKS_SEED)),
-  weekStatus: ['done','done','prog','todo','todo','todo','todo','todo','todo','todo','todo','todo','todo','todo','todo'],
+  weekStatus: ['done','done','done','prog','prog','todo','todo','todo','todo','todo','todo','todo','todo','todo','todo'],
   kpiVals: KPI_DEF.map(()=>0),
   conCells: Array(15).fill('skip'),
   liChecks: {1:LI_MILESTONES[1].map(m=>m.def),2:LI_MILESTONES[2].map(()=>false),3:LI_MILESTONES[3].map(()=>false)},
   growthStatus: GROWTH_DEF.map(()=>'todo'),
 };
- 
-let activeWeek = 'W3';
+
+let activeWeek = 'W5';
 let activePlat = 'Semua';
 let addTargetCol = 'todo';
 const WEEK_ORDER = ['W1','W2','W3','W4','W5'];
 const PLATS = ['Semua','LinkedIn','Instagram','Threads','Blog','GitHub','Story'];
 const DOC_REF = doc(db, 'it-insights', 'dashboard');
- 
+
 // ===== SYNC =====
 function setSyncing(s) {
   const dot = document.getElementById('sync-dot');
@@ -700,14 +725,14 @@ function setSyncing(s) {
   else if(s==='ok'){dot.className='sync-dot';lbl.textContent='Tersimpan';}
   else{dot.className='sync-dot error';lbl.textContent='Gagal konek';}
 }
- 
+
 async function saveToFirebase() {
   if(!isOwner) return;
   setSyncing('syncing');
   try { await setDoc(DOC_REF, state); setSyncing('ok'); }
   catch(e) { console.error(e); setSyncing('error'); }
 }
- 
+
 async function loadFromFirebase() {
   try {
     const snap = await getDoc(DOC_REF);
@@ -723,7 +748,7 @@ async function loadFromFirebase() {
     setSyncing('ok');
   } catch(e) { console.error(e); setSyncing('error'); }
 }
- 
+
 // ===== AUTH =====
 function renderHeaderUser(user) {
   const el = document.getElementById('header-user');
@@ -748,7 +773,7 @@ function renderHeaderUser(user) {
     document.getElementById('user-dropdown').classList.toggle('open');
   };
 }
- 
+
 function applyReadonlyState() {
   const content = document.getElementById('main-content');
   const banner = document.getElementById('readonly-banner');
@@ -760,7 +785,7 @@ function applyReadonlyState() {
     banner.classList.add('show');
   }
 }
- 
+
 async function doLogin() {
   try {
     await signInWithPopup(auth, provider);
@@ -768,19 +793,19 @@ async function doLogin() {
     console.error('Login gagal:', e.message);
   }
 }
- 
+
 async function doLogout() {
   document.getElementById('user-dropdown').classList.remove('open');
   await signOut(auth);
 }
- 
+
 document.getElementById('btn-google-login').onclick = doLogin;
 document.getElementById('btn-signout').onclick = doLogout;
- 
+
 document.addEventListener('click', () => {
   document.getElementById('user-dropdown').classList.remove('open');
 });
- 
+
 // ===== NAV =====
 document.querySelectorAll('.main-nav button').forEach(btn=>{
   btn.onclick=()=>{
@@ -790,7 +815,7 @@ document.querySelectorAll('.main-nav button').forEach(btn=>{
     document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
   };
 });
- 
+
 // ===== KANBAN =====
 function renderWeekTabs(){
   const el=document.getElementById('week-tabs');
@@ -804,7 +829,7 @@ function renderWeekTabs(){
     el.appendChild(btn);
   });
 }
- 
+
 function renderPlatFilters(){
   const el=document.getElementById('plat-filters');
   el.innerHTML='';
@@ -816,7 +841,7 @@ function renderPlatFilters(){
     el.appendChild(btn);
   });
 }
- 
+
 function renderKanbanStats(){
   const all=state.tasks.filter(t=>t.week===activeWeek);
   const todo=all.filter(t=>t.status==='todo').length;
@@ -831,7 +856,7 @@ function renderKanbanStats(){
   `;
   document.getElementById('kb-prog-bar').style.width=pct+'%';
 }
- 
+
 function renderKanbanBoard(){
   const filtered=state.tasks.filter(t=>t.week===activeWeek&&(activePlat==='Semua'||t.plat===activePlat));
   const buckets={todo:[],prog:[],done:[]};
@@ -862,9 +887,9 @@ function renderKanbanBoard(){
     };
   });
 }
- 
+
 function renderKanban(){renderWeekTabs();renderKanbanStats();renderKanbanBoard();}
- 
+
 document.querySelectorAll('.kb-add-btn').forEach(btn=>{
   btn.onclick=()=>{
     if(!isOwner) return;
@@ -884,7 +909,7 @@ document.getElementById('modal-save').onclick=()=>{
   document.getElementById('modal').classList.remove('open');
   renderKanban();
 };
- 
+
 // ===== ROADMAP =====
 function renderRoadmap(){
   [1,2,3].forEach((cy,ci)=>{
@@ -912,7 +937,7 @@ function renderRoadmap(){
   document.getElementById('rs-fill').style.width=pct+'%';
   document.getElementById('rs-pct').textContent=done+'/5 ('+pct+'%)';
 }
- 
+
 // ===== KPI =====
 function renderKPI(){
   const grid=document.getElementById('kpi-grid');
@@ -960,7 +985,7 @@ function renderKPI(){
     gridEl.appendChild(c);
   }
 }
- 
+
 // ===== LINKEDIN =====
 function renderLinkedIn(){
   const scEl=document.getElementById('li-scores');
@@ -993,7 +1018,7 @@ function renderLinkedIn(){
     };
   });
 }
- 
+
 // ===== GROWTH =====
 function renderGrowth(){
   const el=document.getElementById('growth-list');
@@ -1024,7 +1049,7 @@ function renderGrowth(){
     };
   });
 }
- 
+
 function renderAll(){
   renderPlatFilters();
   renderKanban();
@@ -1033,22 +1058,22 @@ function renderAll(){
   renderLinkedIn();
   renderGrowth();
 }
- 
+
 // ===== INIT =====
 const d = new Date();
 document.getElementById('hdr-date').innerHTML =
   d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'<br>@seandyarozano';
- 
+
 const loadingScreen = document.getElementById('loading-screen');
 const loginScreen = document.getElementById('login-screen');
- 
+
 // Auth state listener — titik masuk utama
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   isOwner = user ? user.email === OWNER_EMAIL : false;
- 
+
   renderHeaderUser(user);
- 
+
   if(!user) {
     // Belum login → tampilkan halaman login
     document.getElementById('loading-msg').textContent = 'Siap...';
@@ -1059,7 +1084,7 @@ onAuthStateChanged(auth, async (user) => {
     }, 300);
     return;
   }
- 
+
   // Sudah login → load data lalu render
   loginScreen.classList.remove('show');
   loadingScreen.style.display = 'flex';
@@ -1067,11 +1092,11 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('loading-msg').textContent = isOwner
     ? 'Memuat data dashboard...'
     : 'Memuat data (mode view only)...';
- 
+
   await loadFromFirebase();
   applyReadonlyState();
   renderAll();
- 
+
   loadingScreen.style.opacity = '0';
   setTimeout(() => loadingScreen.style.display = 'none', 400);
 });
